@@ -70,6 +70,10 @@ This section shows you how to migrate API keys to Grafana service accounts using
 
 To follow these instructions, you need:
 
+- Admin/Editor role
+- API keys writer
+- Service account writer
+
 - To ensure you have permission to create Grafana service accounts. For more information about permissions, refer to [Roles and permissions]({{< relref "../roles-and-permissions/#" >}}).
 
 #### Steps
@@ -96,8 +100,9 @@ This section shows you how to migrate API keys to Grafana service accounts using
 
 To follow these instructions, you need:
 
-- xxx
-- xxx
+- Admin/Editor role
+- API keys writer
+- Service account writer
 
 #### Steps
 
@@ -124,8 +129,7 @@ This section shows you how to migrate API keys to Grafana service accounts using
 
 To follow these instructions, you need:
 
-- xxx
-- xxx
+- Only for those whom take care of your terraform provisioning
 
 #### Steps
 
@@ -134,5 +138,4 @@ Complete the following steps to migrate from API keys to service accounts using 
 1. Generate `grafana_service_account` and `grafana_service_account_token` resources.
 1. When creating the service account, specify the desired scopes and expiration date.
 1. Use the token returned from `grafana_service_account_token` to authenticate the API requests.
-1. Remove references to the deprecated `grafana_api_key` resource.
-1. Track the [API keys](http://localhost:3000/org/apikeys) in use and migrate them to SATs.
+1. Remove the resources from your terraform configuration for creating the `grafana_api_key`.
