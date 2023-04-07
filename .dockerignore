@@ -1,6 +1,6 @@
 .awcache
 .dockerignore
-.git
+#.git
 .gitignore
 .vscode
 bin
