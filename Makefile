@@ -16,8 +16,6 @@ GO_BUILD_FLAGS += $(if $(GO_BUILD_DEV),-dev)
 GO_BUILD_FLAGS += $(if $(GO_BUILD_DEV),-dev)
 GO_BUILD_FLAGS += $(if $(GO_BUILD_TAGS),-build-tags=$(GO_BUILD_TAGS))
 
-GIT_SHA=$(shell git rev-parse --short HEAD)
-
 targets := $(shell echo '$(sources)' | tr "," " ")
 
 all: deps build
@@ -181,6 +179,7 @@ shellcheck: $(SH_FILES) ## Run checks for shell scripts.
 
 TAG_SUFFIX=$(if $(WIRE_TAGS)!=oss,-$(WIRE_TAGS))
 PLATFORM=linux/amd64
+GIT_SHA=$(shell git rev-parse --short HEAD)
 
 build-docker-full: ## Build Docker image for development.
 	@echo "build docker container"
@@ -207,8 +206,17 @@ build-docker-full-ubuntu: ## Build Docker image based on Ubuntu for development.
 	$(DOCKER_BUILD_ARGS)
 
 build-docker-local:
-	make build-js
-	docker buildx build --platform linux/amd64 --tag grafana/grafana:main-${GIT_SHA}-local -f Dockerfile .
+	@echo "build docker container"
+	tar -ch . | \
+	docker buildx build - \
+	--platform $(PLATFORM) \
+	--build-arg BINGO=false \
+	--build-arg GO_BUILD_TAGS=$(GO_BUILD_TAGS) \
+	--build-arg WIRE_TAGS=$(WIRE_TAGS) \
+	--build-arg BASE_IMAGE=ubuntu:20.04 \
+	--build-arg GO_IMAGE=golang:1.20.1 \
+	--tag grafana/grafana$(TAG_SUFFIX):dev-ubuntu \
+	$(DOCKER_BUILD_ARGS)
 
 ##@ Services
 
