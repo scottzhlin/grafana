@@ -167,6 +167,7 @@ shellcheck: $(SH_FILES) ## Run checks for shell scripts.
 
 TAG_SUFFIX=$(if $(WIRE_TAGS)!=oss,-$(WIRE_TAGS))
 PLATFORM=linux/amd64
+GIT_SHA=$(shell git rev-parse --short HEAD)
 
 build-docker-full: ## Build Docker image for development.
 	@echo "build docker container"
@@ -194,6 +195,21 @@ build-docker-full-ubuntu: ## Build Docker image based on Ubuntu for development.
 	--build-arg BASE_IMAGE=ubuntu:20.04 \
 	--build-arg GO_IMAGE=golang:1.20.3 \
 	--tag grafana/grafana$(TAG_SUFFIX):dev-ubuntu \
+	$(DOCKER_BUILD_ARGS)
+
+build-docker-local:
+	@echo "build docker container"
+	tar -ch . | \
+	docker buildx build - \
+	--platform $(PLATFORM) \
+	--build-arg BINGO=false \
+	--build-arg GO_BUILD_TAGS=$(GO_BUILD_TAGS) \
+	--build-arg WIRE_TAGS=$(WIRE_TAGS) \
+	--build-arg COMMIT_SHA=$$(git rev-parse --short HEAD) \
+	--build-arg BUILD_BRANCH=$$(git rev-parse --abbrev-ref HEAD) \
+	--build-arg BASE_IMAGE=ubuntu:20.04 \
+	--build-arg GO_IMAGE=golang:1.20.3 \
+	--tag grafana/grafana:main-${GIT_SHA}-local \
 	$(DOCKER_BUILD_ARGS)
 
 ##@ Services
