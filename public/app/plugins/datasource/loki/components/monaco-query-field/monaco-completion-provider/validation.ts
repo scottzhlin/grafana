@@ -21,6 +21,7 @@ export function validateQuery(
   interpolatedQuery: string,
   queryLines: string[]
 ): ParserErrorBoundary[] | false {
+  return false;
   if (!query) {
     return false;
   }
