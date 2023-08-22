@@ -196,6 +196,21 @@ build-docker-full-ubuntu: ## Build Docker image based on Ubuntu for development.
 	--tag grafana/grafana$(TAG_SUFFIX):dev-ubuntu \
 	$(DOCKER_BUILD_ARGS)
 
+build-docker-local: ## Build Docker image based on Ubuntu for development.
+	@echo "build docker container"
+	tar -ch . | \
+	docker buildx build - \
+	--platform $(PLATFORM) \
+	--build-arg BINGO=false \
+	--build-arg GO_BUILD_TAGS=$(GO_BUILD_TAGS) \
+	--build-arg WIRE_TAGS=$(WIRE_TAGS) \
+	--build-arg COMMIT_SHA=$$(git rev-parse --short HEAD) \
+	--build-arg BUILD_BRANCH=$$(git rev-parse --abbrev-ref HEAD) \
+	--build-arg BASE_IMAGE=ubuntu:20.04 \
+	--build-arg GO_IMAGE=golang:1.20.6 \
+	--tag grafana/grafana:9.5.8-local \
+	$(DOCKER_BUILD_ARGS)
+
 ##@ Services
 
 # create docker-compose file with provided sources and start them
