@@ -207,7 +207,7 @@ build-docker-local: ## Build Docker image based on Ubuntu for development.
 	--build-arg COMMIT_SHA=$$(git rev-parse --short HEAD) \
 	--build-arg BUILD_BRANCH=$$(git rev-parse --abbrev-ref HEAD) \
 	--build-arg BASE_IMAGE=ubuntu:20.04 \
-	--build-arg GO_IMAGE=golang:1.20.6 \
+	--build-arg GO_IMAGE=golang:1.20.4 \
 	--tag grafana/grafana:9.5.8-local \
 	$(DOCKER_BUILD_ARGS)
 
