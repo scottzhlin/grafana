@@ -176,9 +176,7 @@ build-docker-local: ## Build Docker image based on Ubuntu for development.
 	--platform linux/amd64 \
 	--build-arg BASE_IMAGE=ubuntu:20.04 \
 	--build-arg GO_IMAGE=golang:1.20.4 \
-	--tag grafana/grafana:9.3.16-local \
-	-f ./Dockerfile.ubuntu .
-
+	--tag grafana/grafana:9.3.16-local .
 ##@ Services
 
 # create docker-compose file with provided sources and start them
